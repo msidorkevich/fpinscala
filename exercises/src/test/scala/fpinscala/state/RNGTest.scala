@@ -17,4 +17,10 @@ class RNGTest extends FunSuite {
     val (nonNegative: Int, newRNG: RNG) = RNG.nonNegativeInt(initialRNG)
     assert(nonNegative >= 0)
   }
+
+  test("double") {
+    val initialRNG = RNG.Simple(1)
+    val (double: Double, newRNG: RNG) = RNG.double(initialRNG)
+    assert(double.isWhole() === false)
+  }
 }
