@@ -37,11 +37,15 @@ object RNG {
 
   def double(rng: RNG): (Double, RNG) = {
     val (int1: Int, newRNG: RNG) = rng.nextInt
-    val (int2: Int, newRNG2: RNG) = newRNG.nextInt
-    (int1 * 1.0 / int2, newRNG2)
+    val (int2: Int, resultRNG: RNG) = newRNG.nextInt
+    (int1 * 1.0 / int2, resultRNG)
   }
 
-  def intDouble(rng: RNG): ((Int,Double), RNG) = ???
+  def intDouble(rng: RNG): ((Int,Double), RNG) = {
+    val (int: Int, newRNG: RNG) = rng.nextInt
+    val (dbl: Double, resultRNG: RNG) = double(newRNG)
+    ((int, dbl), resultRNG)
+  }
 
   def doubleInt(rng: RNG): ((Double,Int), RNG) = ???
 
