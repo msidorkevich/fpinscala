@@ -3,9 +3,9 @@ package fpinscala.state
 import org.scalatest.FunSuite
 import org.scalatest.BeforeAndAfter
 
-class RNGTest extends FunSuite with BeforeAndAfter{
+class RNGTest extends FunSuite with BeforeAndAfter {
 
-  private var initialRNG = _
+  private var initialRNG: RNG = _
 
   before {
     initialRNG = RNG.Simple(1)
@@ -50,5 +50,18 @@ class RNGTest extends FunSuite with BeforeAndAfter{
     assert(d1.isWhole() === false)
     assert(d2.isWhole() === false)
     assert(d3.isWhole() === false)
+  }
+
+  test("ints") {
+    val count = 5
+    val (intList, _) = RNG.ints(count)(initialRNG)
+
+    assert(intList.size === count)
+  }
+
+  test("ints of 0 size") {
+    val (intList, _) = RNG.ints(0)(initialRNG)
+
+    assert(intList.isEmpty === true)
   }
 }

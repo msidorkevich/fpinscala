@@ -60,7 +60,18 @@ object RNG {
     ((double1, double2, double3), rng3)
   }
 
-  def ints(count: Int)(rng: RNG): (List[Int], RNG) = ???
+  def ints(count: Int)(rng: RNG): (List[Int], RNG) = {
+    def ints0(count: Int, rng: RNG, list: List[Int]): (List[Int], RNG) = {
+      if (count == 0)
+        (list, rng)
+      else {
+        val (int, newRNG) = rng.nextInt
+        ints0(count - 1, newRNG, int :: list)
+      }
+    }
+
+    ints0(count, rng, List())
+  }
 
   def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] = ???
 
