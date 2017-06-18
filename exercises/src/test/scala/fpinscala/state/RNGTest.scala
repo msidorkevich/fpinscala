@@ -1,5 +1,6 @@
 package fpinscala.state
 
+import fpinscala.state.RNG.Rand
 import org.scalatest.FunSuite
 import org.scalatest.BeforeAndAfter
 
@@ -63,5 +64,15 @@ class RNGTest extends FunSuite with BeforeAndAfter {
     val (intList, _) = RNG.ints(0)(initialRNG)
 
     assert(intList.isEmpty === true)
+  }
+
+  test("map2") {
+    val ra: Rand[Int] = RNG.unit(12345)
+    val rb: Rand[Int] = RNG.unit(23456)
+    val randSum: Rand[Int] = RNG.map2(ra, rb)(_ + _)
+
+    val (sum, _) = randSum.apply(initialRNG)
+
+    assert(sum === 12345 + 23456)
   }
 }
