@@ -76,7 +76,9 @@ object RNG {
     }
   }
 
-  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = ???
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
+    fs.reverse.foldLeft(unit(List[A]()))((acc, f) => map2(f, acc)(_ :: _))
+  }
 
   def flatMap[A,B](f: Rand[A])(g: A => Rand[B]): Rand[B] = ???
 }

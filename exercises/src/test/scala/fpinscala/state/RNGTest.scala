@@ -75,4 +75,15 @@ class RNGTest extends FunSuite with BeforeAndAfter {
 
     assert(sum === 12345 + 23456)
   }
+
+  test("sequence") {
+    val ra: Rand[Int] = RNG.unit(12345)
+    val rb: Rand[Int] = RNG.unit(23456)
+    val rc: Rand[Int] = RNG.unit(34567)
+
+    val seq: Rand[List[Int]] = RNG.sequence(List(ra, rb, rc))
+    val list = seq.apply(initialRNG)._1
+
+    assert(list === List(12345, 23456, 34567))
+  }
 }
