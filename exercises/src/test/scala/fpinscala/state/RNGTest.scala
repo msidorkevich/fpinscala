@@ -86,4 +86,13 @@ class RNGTest extends FunSuite with BeforeAndAfter {
 
     assert(list === List(12345, 23456, 34567))
   }
+
+  test("flatMap") {
+    val ra: Rand[Int] = RNG.unit(12345)
+    val raPlusOne: Rand[Int] = RNG.flatMap(ra)(a => RNG.unit(a + 1))
+
+    val (raPlusOneValue, _) = raPlusOne.apply(initialRNG)
+
+    assert(raPlusOneValue === 12345 + 1)
+  }
 }
