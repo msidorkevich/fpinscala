@@ -95,4 +95,33 @@ class RNGTest extends FunSuite with BeforeAndAfter {
 
     assert(raPlusOneValue === 12345 + 1)
   }
+
+  test("State.map") {
+    val rand: State.Rand[Int] = State(RNG.unit(12345))
+    val randPlusOne: State.Rand[Int] = rand.map(_ + 1)
+
+    val (plusOne, _) = randPlusOne.run(initialRNG)
+
+    assert(plusOne === 12345 + 1)
+  }
+
+  test("State.map2") {
+    val rand1: State.Rand[Int] = State(RNG.unit(12345))
+    val rand2: State.Rand[Int] = State(RNG.unit(23456))
+
+    val randSum = rand1.map2(rand2)(_ + _)
+
+    val (sum, _) = randSum.run(initialRNG)
+
+    assert(sum === 12345 + 23456)
+  }
+
+  test("State.flatMap") {
+    val rand: State.Rand[Int] = State(RNG.unit(12345))
+    val randPlusOne: State.Rand[Int] = rand.flatMap(a => State(RNG.unit(a + 1)))
+
+    val (plusOne, _) = randPlusOne.run(initialRNG)
+
+    assert(plusOne === 12345 + 1)
+  }
 }
