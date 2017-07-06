@@ -25,10 +25,7 @@ object RNG {
     rng => (a, rng)
 
   def map[A,B](s: Rand[A])(f: A => B): Rand[B] =
-    rng => {
-      val (a, rng2) = s(rng)
-      (f(a), rng2)
-    }
+    flatMap(s)(a => unit(f(a)))
 
   def nonNegativeInt(rng: RNG): (Int, RNG) = {
     val (i: Int, newRng: RNG) = rng.nextInt
@@ -83,23 +80,19 @@ object RNG {
 
 case class State[S,+A](run: S => (A, S)) {
   def map[B](f: A => B): State[S, B] = {
-    State(s => {
-      val (value, newState) = run(s)
-      (f(value), newState)
-    })
+    flatMap(a => unit(f(a)))
   }
   def map2[B,C](sb: State[S, B])(f: (A, B) => C): State[S, C] =
-    State(s => {
-      val (val1, s1) = run(s)
-      val (val2, s2) = sb.run(s1)
+    flatMap(a => sb.map(f.curried(a)))
 
-      (f(val1, val2), s2)
-    })
   def flatMap[B](f: A => State[S, B]): State[S, B] =
     State(s => {
       val (value, s1) = run(s)
       f(value).run(s1)
     })
+
+  def unit[B](b: B): State[S, B] =
+    State(s => (b, s))
 }
 
 sealed trait Input
